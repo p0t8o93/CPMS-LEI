@@ -25,6 +25,10 @@ services:
       - db
     networks:
       - app-network
+    volumes:
+      - ./frontend-backend:/usr/src/app
+      - /usr/src/app/node_modules
+    command: npm run dev
 
 volumes:
   db_data:
