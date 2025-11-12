@@ -499,6 +499,58 @@ function renderDashboardPage() {
     `;
 }
 
+// Procurement & Inventory Page
+function renderProcurementPage(){
+    const inventoryData = [
+        { id: '1', name: 'Safety Helmets', category: 'PPE', quantity: 145, unit: 'pcs', minStock: 50, location: 'Warehouse A - Shelf 12', lastUpdated: '2025-10-12', status: 'In Stock' },
+        { id: '2', name: 'Safety Goggles', category: 'PPE', quantity: 28, unit: 'pcs', minStock: 30, location: 'Warehouse A - Shelf 13', lastUpdated: '2025-10-11', status: 'Low Stock' },
+        { id: '3', name: 'First Aid Kits', category: 'Medical', quantity: 67, unit: 'kits', minStock: 20, location: 'Warehouse B - Zone 3', lastUpdated: '2025-10-10', status: 'In Stock' },
+        { id: '4', name: 'Fire Extinguishers', category: 'Safety Equipment', quantity: 0, unit: 'units', minStock: 15, location: 'Warehouse B - Zone 1', lastUpdated: '2025-10-09', status: 'Out of Stock' },
+        { id: '5', name: 'Safety Vests', category: 'PPE', quantity: 203, unit: 'pcs', minStock: 100, location: 'Warehouse A - Shelf 15', lastUpdated: '2025-10-13', status: 'In Stock' },
+        { id: '6', name: 'Work Gloves', category: 'PPE', quantity: 89, unit: 'pairs', minStock: 75, location: 'Warehouse A - Shelf 14', lastUpdated: '2025-10-12', status: 'In Stock' }
+    ];
+
+    const ordersData = [
+        { id: '1', orderNumber: 'PO-2025-0234', supplier: 'SafetyPro Equipment Inc.', items: 'Safety Helmets, Safety Goggles', quantity: 150, totalCost: '$4,250.00', orderDate: '2025-10-10', expectedDelivery: '2025-10-20', status: 'In Transit' },
+        { id: '2', orderNumber: 'PO-2025-0235', supplier: 'Emergency Solutions Ltd.', items: 'First Aid Kits, Fire Extinguishers', quantity: 50, totalCost: '$3,800.00', orderDate: '2025-10-11', expectedDelivery: '2025-10-18', status: 'Approved' },
+        { id: '3', orderNumber: 'PO-2025-0236', supplier: 'Industrial Supply Co.', items: 'Safety Vests, Work Gloves', quantity: 200, totalCost: '$2,650.00', orderDate: '2025-10-12', expectedDelivery: '2025-10-22', status: 'Pending' },
+        { id: '4', orderNumber: 'PO-2025-0229', supplier: 'SafetyPro Equipment Inc.', items: 'Safety Helmets, Fire Extinguishers', quantity: 75, totalCost: '$5,120.00', orderDate: '2025-10-05', expectedDelivery: '2025-10-15', status: 'Delivered' },
+        { id: '5', orderNumber: 'PO-2025-0225', supplier: 'WorkSafe Distributors', items: 'Safety Goggles, Work Gloves', quantity: 100, totalCost: '$1,890.00', orderDate: '2025-10-02', expectedDelivery: '2025-10-12', status: 'Delivered' }
+    ];
+
+    const totals = {
+        totalItems: inventoryData.length,
+        inStock: inventoryData.filter(i => i.status === 'In Stock').length,
+        lowStock: inventoryData.filter(i => i.status === 'Low Stock').length,
+        outOfStock: inventoryData.filter(i => i.status === 'Out of Stock').length
+    };
+
+    const renderInventoryRows = (rows) => rows.map(item => `
+        <tr>
+            <td>${item.name}</td>
+            <td>${item.category}</td>
+            <td class="text-right">${item.quantity} ${item.unit}</td>
+            <td class="text-right">${item.minStock} ${item.unit}</td>
+            <td>${item.location}</td>
+            <td>${item.lastUpdated}</td>
+            <td>${statusBadge(item.status)}</td>
+        </tr>
+    `).join('');
+
+    const renderOrderRows = (rows) => rows.map(order => `
+        <tr>
+            <td>${order.orderNumber}</td>
+            <td>${order.supplier}</td>
+            <td>${order.items}</td>
+            <td class="text-right">${order.quantity}</td>
+            <td class="text-right">${order.totalCost}</td>
+            <td>${order.orderDate}</td>
+            <td>${order.expectedDelivery}</td>
+            <td>${statusBadge(order.status)}</td>
+        </tr>
+    `).join('');
+}
+
 // Settings Page
 function renderSettingsPage() {
     return `
