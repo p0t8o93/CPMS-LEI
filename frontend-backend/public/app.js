@@ -926,6 +926,7 @@ function attachLoginHandlers() {
             e.preventDefault();
             isAuthenticated = true;
             saveAuthState();
+            activeSidebarPage = 'dashboard';
             currentPage = 'dashboard';
             render();
         });
