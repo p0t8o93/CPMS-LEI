@@ -674,6 +674,114 @@ function renderProcurementPage(){
     `;
 }
 
+// User Profile Page
+function renderProfilePage(){
+    const profile = profileData;
+
+    return `
+        <div class="dashboard-container">
+            <nav class="top-nav">
+                <div class="nav-logo">
+                    <img src="LOGO2.png" alt="LinkENERGIÉ Logo" class="nav-logo-image" data-dark-src="LOGO3A.png" data-light-src="LOGO3A.png" />
+                    <img src="SYSTEM NAME below the logo.png" alt="LinkENERGIÉ" class="nav-name-image" data-dark-src="subtitle2.png" data-light-src="subtitle2.png" />
+                </div>
+                <div class="nav-links">
+                    <a href="#" class="nav-link active" data-nav="dashboard" tabindex="0">Dashboard</a>
+                    <a href="#" class="nav-link" data-nav="projects" tabindex="0">Our projects</a>
+                    <a href="#" class="nav-link" data-nav="contact" tabindex="0">Contact us</a>
+                </div>
+            </nav>
+            ${renderSidebar()}
+            <main class="main-content">
+                <div class="page-header">
+                    <h1 class="page-title">User Profile</h1>
+                    <p class="page-subtitle">Employee Information and Details</p>
+                    <div class="page-actions"><span class="badge badge-orange">Active</span></div>
+                </div>
+
+                <div class="content-card">
+                    <div class="profile-row">
+                        <div class="profile-avatar">${icons.user}</div>
+                        <div>
+                            <h3 class="card-title">Junho Leon</h3>
+                            <p class="text-muted">Role of Access</p>
+                            <span class="badge">${icons.briefcase} ${profile.jobTitle}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="content-card">
+                    <h3 class="card-title">Personal Information</h3>
+                    <div class="grid-3">
+                        <div class="form-group"><label>Employee ID</label><input class="form-input" value="${profile.employeeId}" readonly></div>
+                        <div class="form-group"><label>First Name</label><input class="form-input" value="${profile.firstName}"></div>
+                        <div class="form-group"><label>Middle Name</label><input class="form-input" value="${profile.middleName}"></div>
+                        <div class="form-group"><label>Last Name</label><input class="form-input" value="${profile.lastName}"></div>
+                        <div class="form-group"><label>Date of Birth</label><input type="date" class="form-input" value="${profile.dob}"></div>
+                        <div class="form-group"><label>Gender</label>
+                            <select class="form-select">
+                                <option ${profile.gender==='male'?'selected':''}>Male</option>
+                                <option ${profile.gender==='female'?'selected':''}>Female</option>
+                                <option ${profile.gender==='other'?'selected':''}>Other</option>
+                                <option>Prefer not to say</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="content-card">
+                    <h3 class="card-title">Contact Information</h3>
+                    <div class="grid-2">
+                        <div class="form-group"><label>Phone Number</label><input class="form-input" value="${profile.phone}"></div>
+                        <div class="form-group"><label>Email Address</label><input class="form-input" value="${profile.email}"></div>
+                        <div class="form-group full"><label>Address</label><input class="form-input" value="${profile.address}"></div>
+                        <div class="form-group"><label>Emergency Contact Number</label><input class="form-input" value="${profile.emergencyContact}"></div>
+                        <div class="form-group"><label>Emergency Contact Name</label><input class="form-input" value="${profile.emergencyName}"></div>
+                    </div>
+                </div>
+
+                <div class="content-card">
+                    <h3 class="card-title">Employment Information</h3>
+                    <div class="grid-3">
+                        <div class="form-group"><label>Job Title</label><input class="form-input" value="${profile.jobTitle}"></div>
+                        <div class="form-group"><label>Department</label>
+                            <select class="form-select">
+                                <option ${profile.department==='Safety & Compliance'?'selected':''}>Safety & Compliance</option>
+                                <option>Engineering</option>
+                                <option>Operations</option>
+                                <option>Human Resources</option>
+                                <option>Finance</option>
+                            </select>
+                        </div>
+                        <div class="form-group"><label>Employment Status</label>
+                            <select class="form-select">
+                                <option ${profile.employmentStatus==='Active'?'selected':''}>Active</option>
+                                <option>Suspended</option>
+                                <option>Inactive</option>
+                            </select>
+                        </div>
+                        <div class="form-group"><label>Role</label>
+                            <select class="form-select">
+                                <option ${profile.role==='Administrator'?'selected':''}>Administrator</option>
+                                <option>Editor</option>
+                                <option>Viewer</option>
+                            </select>
+                        </div>
+                        <div class="form-group"><label>Start Date</label>
+                            <div class="date-input-wrapper">
+                                <span class="calendar-icon">${icons.calendar}</span>
+                                <input type="date" class="form-input" value="${profile.startDate}">
+                            </div>
+                        </div>
+                        <div class="form-group"><label>Reports To</label><input class="form-input" value="${profile.supervisor}"></div>
+                    </div>
+                    <div class="form-actions"><button class="btn btn-primary">Save Changes</button><button class="btn btn-primary">Cancel</button></div>
+                </div>
+            </main>
+        </div>
+    `;
+}
+
 // Settings Page
 function renderSettingsPage() {
     return `
