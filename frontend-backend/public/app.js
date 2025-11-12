@@ -119,6 +119,20 @@ icons.shoppingCart = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none
     <path d="M1 1h3l.4 2M6 5h14l-1.5 7h-12z"></path>
 </svg>`;
 
+function statusBadge(status) {
+    const map = {
+        'In Stock': 'badge badge-green',
+        'Delivered': 'badge badge-green',
+        'Low Stock': 'badge badge-yellow',
+        'Pending': 'badge badge-yellow',
+        'Out of Stock': 'badge badge-red',
+        'Cancelled': 'badge badge-red',
+        'Approved': 'badge badge-blue',
+        'In Transit': 'badge badge-purple'
+    }
+    return `<span class="${map[status] || 'badge'}">${status}</span>`;
+}
+
 
 // Login Page
 function renderLoginPage() {
