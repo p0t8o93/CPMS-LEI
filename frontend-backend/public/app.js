@@ -1063,6 +1063,202 @@ function attachRegistrationHandlers() {
     }
 }
 
+function attachProcurementHandlers() {
+    attachDashboardHandlers();
+    const tabTriggers = document.querySelectorAll('.tab-trigger');
+    const tabContents = document.querySelectorAll('.tab-content');
+    const addNewBtns = document.querySelectorAll('#addNewBtn');
+    tabTriggers.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const tab = btn.getAttribute('data-tab');
+            tabTriggers.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            tabContents.forEach(c => c.classList.toggle('active', c.getAttribute('data-content') === tab));
+        });
+    });
+
+    const inventoryData = Array.from(document.querySelectorAll('#inventoryBody tr')).map(tr => ({
+        name: tr.children[0].textContent.toLowerCase(),
+        category: tr.children[1].textContent.toLowerCase(),
+        location: tr.children[4].textContent.toLowerCase(),
+        raw: tr.outerHTML
+    }));
+    const ordersData = Array.from(document.querySelectorAll('#ordersBody tr')).map(tr => ({
+        orderNumber: tr.children[0].textContent.toLowerCase(),
+        supplier: tr.children[1].textContent.toLowerCase(),
+        items: tr.children[2].textContent.toLowerCase(),
+        raw: tr.outerHTML
+    }));
+
+    const invSearch = document.getElementById('inventorySearch');
+    const ordersSearch = document.getElementById('ordersSearch');
+    const invBody = document.getElementById('inventoryBody');
+    const ordBody = document.getElementById('ordersBody');
+
+    if (invSearch) {
+        invSearch.addEventListener('input', () => {
+            const q = invSearch.value.toLowerCase();
+            invBody.innerHTML = inventoryData
+                .filter(r => r.name.includes(q) || r.category.includes(q) || r.location.includes(q))
+                .map(r => r.raw)
+                .join('');
+        });
+    }
+    if (ordersSearch) {
+        ordersSearch.addEventListener('input', () => {
+            const q = ordersSearch.value.toLowerCase();
+            ordBody.innerHTML = ordersData
+                .filter(r => r.orderNumber.includes(q) || r.supplier.includes(q) || r.items.includes(q))
+                .map(r => r.raw)
+                .join('');
+        });
+    }
+
+    // Wizard modal logic
+    const modal = document.getElementById('addWizardModal');
+    const wizardTitle = document.getElementById('wizardTitle');
+    const wizardStep = document.getElementById('wizardStep');
+    const wizardProgress = document.getElementById('wizardProgress');
+    const btnClose = document.getElementById('wizardClose');
+    const btnBack = document.getElementById('wizardBack');
+    const btnNext = document.getElementById('wizardNext');
+    const btnSubmit = document.getElementById('wizardSubmit');
+
+    const openModal = () => { modal.setAttribute('aria-hidden','false'); modal.classList.add('open'); };
+    const closeModal = () => { modal.setAttribute('aria-hidden','true'); modal.classList.remove('open'); resetWizard(); };
+
+    const inventorySteps = [
+        { key: 'name', label: 'Item Name', type: 'text', placeholder: 'e.g., Safety Helmets' },
+        { key: 'category', label: 'Category', type: 'text', placeholder: 'e.g., PPE' },
+        { key: 'quantity', label: 'Quantity', type: 'number', min: 0 },
+        { key: 'unit', label: 'Unit', type: 'text', placeholder: 'e.g., pcs, kits' },
+        { key: 'minStock', label: 'Min Stock', type: 'number', min: 0 },
+        { key: 'location', label: 'Location', type: 'text', placeholder: 'Warehouse & shelf' },
+        { key: 'lastUpdated', label: 'Last Updated', type: 'date' },
+        { key: 'status', label: 'Status', type: 'select', options: ['In Stock','Low Stock','Out of Stock'] }
+    ];
+    const orderSteps = [
+        { key: 'orderNumber', label: 'Order Number', type: 'text', placeholder: 'e.g., PO-2025-XXXX' },
+        { key: 'supplier', label: 'Supplier', type: 'text', placeholder: 'Supplier name' },
+        { key: 'items', label: 'Items', type: 'text', placeholder: 'Comma-separated items' },
+        { key: 'quantity', label: 'Quantity', type: 'number', min: 0 },
+        { key: 'totalCost', label: 'Total Cost', type: 'text', placeholder: '$0.00' },
+        { key: 'orderDate', label: 'Order Date', type: 'date' },
+        { key: 'expectedDelivery', label: 'Expected Delivery', type: 'date' },
+        { key: 'status', label: 'Status', type: 'select', options: ['Pending','Approved','In Transit','Delivered','Cancelled'] }
+    ];
+
+    let wizardState = { tab: 'inventory', index: 0, data: {} };
+
+    const renderStep = () => {
+        const steps = wizardState.tab === 'inventory' ? inventorySteps : orderSteps;
+        const step = steps[wizardState.index];
+        wizardTitle.textContent = wizardState.tab === 'inventory' ? 'Add Inventory Item' : 'Add Order';
+        wizardProgress.textContent = `Step ${wizardState.index + 1} of ${steps.length}`;
+
+        const currentVal = wizardState.data[step.key] || '';
+        let fieldHTML = '';
+        if (step.type === 'select') {
+            fieldHTML = `<label class="form-label">${step.label}</label>
+                <select id="wizardField" class="form-input">${step.options.map(o=>`<option ${o===currentVal?'selected':''}>${o}</option>`).join('')}</select>`;
+        } else {
+            const attrs = [];
+            if (step.placeholder) attrs.push(`placeholder="${step.placeholder}"`);
+            if (step.min !== undefined) attrs.push(`min="${step.min}"`);
+            fieldHTML = `<label class="form-label">${step.label}</label>
+                <input id="wizardField" class="form-input" type="${step.type}" ${attrs.join(' ')} value="${currentVal}">`;
+        }
+        wizardStep.innerHTML = `<div class="form-group">${fieldHTML}
+            <p class="helper-text">Fill in and click Next</p></div>`;
+
+        btnBack.style.display = wizardState.index === 0 ? 'none' : 'inline-block';
+        btnNext.style.display = wizardState.index < steps.length - 1 ? 'inline-block' : 'none';
+        btnSubmit.style.display = wizardState.index === steps.length - 1 ? 'inline-block' : 'none';
+    };
+
+    const resetWizard = () => { wizardState.index = 0; wizardState.data = {}; wizardState.tab = 'inventory'; wizardStep.innerHTML=''; };
+    const persistField = () => {
+        const steps = wizardState.tab === 'inventory' ? inventorySteps : orderSteps;
+        const step = steps[wizardState.index];
+        const el = document.getElementById('wizardField');
+        if (!el) return;
+        let val = el.value;
+        if (step.type === 'number') val = Number(val || 0);
+        wizardState.data[step.key] = val;
+    };
+
+    btnClose.addEventListener('click', closeModal);
+    btnBack.addEventListener('click', () => { persistField(); wizardState.index = Math.max(0, wizardState.index - 1); renderStep(); });
+    btnNext.addEventListener('click', () => { persistField(); wizardState.index += 1; renderStep(); });
+    btnSubmit.addEventListener('click', () => {
+        persistField();
+        const today = new Date().toISOString().slice(0,10);
+        if (wizardState.tab === 'inventory' && invBody) {
+            const d = wizardState.data;
+            const item = {
+                name: d.name || 'New Item',
+                category: d.category || 'PPE',
+                quantity: d.quantity ?? 0,
+                unit: d.unit || 'pcs',
+                minStock: d.minStock ?? 0,
+                location: d.location || 'Warehouse',
+                lastUpdated: d.lastUpdated || today,
+                status: d.status || 'In Stock'
+            };
+            const rowHTML = `<tr>
+                <td>${item.name}</td>
+                <td>${item.category}</td>
+                <td class="text-right">${item.quantity} ${item.unit}</td>
+                <td class="text-right">${item.minStock} ${item.unit}</td>
+                <td>${item.location}</td>
+                <td>${item.lastUpdated}</td>
+                <td>${statusBadge(item.status)}</td>
+            </tr>`;
+            invBody.insertAdjacentHTML('beforeend', rowHTML);
+            inventoryData.push({ name: item.name.toLowerCase(), category: item.category.toLowerCase(), location: item.location.toLowerCase(), raw: rowHTML });
+        }
+        if (wizardState.tab === 'orders' && ordBody) {
+            const d = wizardState.data;
+            const order = {
+                orderNumber: d.orderNumber || `PO-NEW-${Math.floor(1000 + Math.random()*9000)}`,
+                supplier: d.supplier || 'New Supplier',
+                items: d.items || '—',
+                quantity: d.quantity ?? 0,
+                totalCost: d.totalCost || '$0.00',
+                orderDate: d.orderDate || today,
+                expectedDelivery: d.expectedDelivery || today,
+                status: d.status || 'Pending'
+            };
+            const rowHTML = `<tr>
+                <td>${order.orderNumber}</td>
+                <td>${order.supplier}</td>
+                <td>${order.items}</td>
+                <td class="text-right">${order.quantity}</td>
+                <td class="text-right">${order.totalCost}</td>
+                <td>${order.orderDate}</td>
+                <td>${order.expectedDelivery}</td>
+                <td>${statusBadge(order.status)}</td>
+            </tr>`;
+            ordBody.insertAdjacentHTML('beforeend', rowHTML);
+            ordersData.push({ orderNumber: order.orderNumber.toLowerCase(), supplier: order.supplier.toLowerCase(), items: order.items.toLowerCase(), raw: rowHTML });
+        }
+        closeModal();
+    });
+
+    // Open wizard for the active tab
+    const handleOpenWizard = () => {
+        const activeTabBtn = document.querySelector('.tab-trigger.active');
+        const activeTab = activeTabBtn ? activeTabBtn.getAttribute('data-tab') : 'inventory';
+        wizardState.tab = activeTab;
+        wizardState.index = 0;
+        openModal();
+        renderStep();
+    };
+    if (addNewBtns && addNewBtns.length) {
+        addNewBtns.forEach(btn => btn.addEventListener('click', handleOpenWizard));
+    }
+}
+
 function attachDashboardHandlers() {
     const menuItems = document.querySelectorAll('.menu-item');
 
