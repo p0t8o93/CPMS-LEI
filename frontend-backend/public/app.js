@@ -2,6 +2,27 @@
 let currentPage = 'login';
 let isAuthenticated = false;
 let theme = 'dark';
+let activeSidebarPage = 'dashboard';
+// Persistent user profile details
+let profileData = {
+    employeeId: 'EMP-2024-001',
+    firstName: 'Junho',
+    middleName: 'Alexander',
+    lastName: 'Leon',
+    dob: '1990-05-15',
+    gender: 'male',
+    phone: '+1 (555) 123-4567',
+    email: 'jl.safety@gmail.com',
+    address: '123 Safety Boulevard, Suite 400, San Francisco, CA 94102',
+    emergencyContact: '+1 (555) 987-6543',
+    emergencyName: 'Sarah Leon (Spouse)',
+    jobTitle: 'Senior Safety Engineer',
+    department: 'Safety & Compliance',
+    employmentStatus: 'Active',
+    role: 'Administrator',
+    startDate: '2020-01-15',
+    supervisor: 'Michael Chen - Director of Safety'
+};
 
 // SVG Icons
 const icons = {
