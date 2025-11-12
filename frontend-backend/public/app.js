@@ -100,6 +100,26 @@ const icons = {
     </svg>`
 };
 
+// Additional icons used across modules
+icons.search = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+    <circle cx="11" cy="11" r="8"></circle>
+    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+</svg>`;
+icons.filter = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+    <polygon points="22 3 2 3 10 12 10 19 14 21 14 12 22 3"></polygon>
+</svg>`;
+icons.package = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+    <path d="M16.5 9.4 7.5 4.21"></path>
+    <path d="m21 16V8a2 2 0 0 0-1-1.73L13 2.27a2 2 0 0 0-2 0L4 6.27A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"></path>
+    <path d="M3.3 7l8.7 5 8.7-5"></path>
+</svg>`;
+icons.shoppingCart = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+    <circle cx="9" cy="21" r="1"></circle>
+    <circle cx="20" cy="21" r="1"></circle>
+    <path d="M1 1h3l.4 2M6 5h14l-1.5 7h-12z"></path>
+</svg>`;
+
+
 // Login Page
 function renderLoginPage() {
     return `
