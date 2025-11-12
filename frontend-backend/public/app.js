@@ -300,6 +300,35 @@ function renderRegistrationPage() {
 }
 
 // Dashboard Page
+function renderSidebar() {
+    return `
+        <aside class="sidebar">
+            <div class="user-profile">
+                <div class="user-avatar">JL</div>
+                <div class="user-info">
+                    <div class="user-name">Junho Leon <span style="display:inline-flex;align-items:center;margin-left:-5px;">${icons.arrowDown}</span></div>
+                    <div class="user-email">jl.safety@gmail.com</div>
+                </div>
+            </div>
+            <div class="sidebar-divider"></div>
+            <nav class="sidebar-menu">
+                <a href="#" class="menu-item ${activeSidebarPage==='dashboard'?'active':''}" data-page="dashboard" tabindex="0"><span class="menu-icon">${icons.home}</span><span>Home</span></a>
+                <a href="#" class="menu-item ${activeSidebarPage==='profile'?'active':''}" data-page="profile" tabindex="0"><span class="menu-icon">${icons.user}</span><span>User Profile</span></a>
+                <a href="#" class="menu-item ${activeSidebarPage==='procurement'?'active':''}" data-page="procurement" tabindex="0"><span class="menu-icon">${icons.file}</span><span>Procurement and Inventory</span><span class="menu-badge">99+</span></a>
+                <a href="#" class="menu-item ${activeSidebarPage==='site'?'active':''}" data-page="site" tabindex="0"><span class="menu-icon">${icons.mapPin}</span><span>Site Management</span></a>
+                <a href="#" class="menu-item ${activeSidebarPage==='workforce'?'active':''}" data-page="workforce" tabindex="0"><span class="menu-icon">${icons.users}</span><span>Workforce Management</span></a>
+                <a href="#" class="menu-item ${activeSidebarPage==='budget'?'active':''}" data-page="budget" tabindex="0"><span class="menu-icon">${icons.wallet}</span><span>Budget and Cost Control</span></a>
+                <a href="#" class="menu-item ${activeSidebarPage==='documents'?'active':''}" data-page="documents" tabindex="0"><span class="menu-icon">${icons.folder}</span><span>Document Management</span></a>
+                <a href="#" class="menu-item ${activeSidebarPage==='help'?'active':''}" data-page="help" tabindex="0"><span class="menu-icon">${icons.help}</span><span>Help</span></a>
+                <a href="#" class="menu-item ${activeSidebarPage==='analytics'?'active':''}" data-page="analytics" tabindex="0"><span class="menu-icon">${icons.barChart}</span><span>Analytics</span></a>
+                <a href="#" class="menu-item" data-page="settings" tabindex="0"><span class="menu-icon">${icons.settings}</span><span>Setting</span><span style="display:inline-flex;align-items:center;margin-left:auto;">${icons.arrowDown}</span></a>
+                <a href="#" class="menu-item" data-page="logout" tabindex="0"><span class="menu-icon">${icons.logout}</span><span>Logout</span></a>
+            </nav>
+        </aside>
+    `;
+}
+
+
 function renderDashboardPage() {
     return `
         <div class="dashboard-container">
