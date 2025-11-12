@@ -99,7 +99,6 @@ const icons = {
         <polyline points="6 9 12 15 18 9"></polyline>
     </svg>`
 };
-
 // Additional icons used across modules
 icons.search = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
     <circle cx="11" cy="11" r="8"></circle>
@@ -119,6 +118,7 @@ icons.shoppingCart = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none
     <path d="M1 1h3l.4 2M6 5h14l-1.5 7h-12z"></path>
 </svg>`;
 
+// Status badge helper used across procurement tables and handlers
 function statusBadge(status) {
     const map = {
         'In Stock': 'badge badge-green',
@@ -129,10 +129,9 @@ function statusBadge(status) {
         'Cancelled': 'badge badge-red',
         'Approved': 'badge badge-blue',
         'In Transit': 'badge badge-purple'
-    }
+    };
     return `<span class="${map[status] || 'badge'}">${status}</span>`;
 }
-
 
 // Login Page
 function renderLoginPage() {
@@ -328,7 +327,6 @@ function renderSidebar() {
     `;
 }
 
-
 function renderDashboardPage() {
     return `
         <div class="dashboard-container">
@@ -343,67 +341,7 @@ function renderDashboardPage() {
                     <a href="#" class="nav-link" data-nav="contact" tabindex="0">Contact us</a>
                 </div>
             </nav>
-            <aside class="sidebar">
-                <div class="user-profile">
-                    <div class="user-avatar">JL</div>
-                    <div class="user-info">
-                        <div class="user-name">
-                            Junho Leon
-                            <span style="display: inline-flex; align-items: center; margin-left: -5px;">${icons.arrowDown}</span>
-                        </div>
-                        <div class="user-email">jl.safety@gmail.com</div>
-                    </div>
-                </div>
-                <div class="sidebar-divider"></div>
-                <nav class="sidebar-menu">
-                    <a href="#" class="menu-item active" data-page="dashboard" tabindex="0">
-                        <span class="menu-icon">${icons.home}</span>
-                        <span>Home</span>
-                    </a>
-                    <a href="#" class="menu-item" data-page="profile" tabindex="0">
-                        <span class="menu-icon">${icons.user}</span>
-                        <span>User Profile</span>
-                    </a>
-                    <a href="#" class="menu-item" data-page="procurement" tabindex="0">
-                        <span class="menu-icon">${icons.file}</span>
-                        <span>Procurement and Inventory</span>
-                        <span class="menu-badge">99+</span>
-                    </a>
-                    <a href="#" class="menu-item" data-page="site" tabindex="0">
-                        <span class="menu-icon">${icons.mapPin}</span>
-                        <span>Site Management</span>
-                    </a>
-                    <a href="#" class="menu-item" data-page="workforce" tabindex="0">
-                        <span class="menu-icon">${icons.users}</span>
-                        <span>Workforce Management</span>
-                    </a>
-                    <a href="#" class="menu-item" data-page="budget" tabindex="0">
-                        <span class="menu-icon">${icons.wallet}</span>
-                        <span>Budget and Cost Control</span>
-                    </a>
-                    <a href="#" class="menu-item" data-page="documents" tabindex="0">
-                        <span class="menu-icon">${icons.folder}</span>
-                        <span>Document Management</span>
-                    </a>
-                    <a href="#" class="menu-item" data-page="help" tabindex="0">
-                        <span class="menu-icon">${icons.help}</span>
-                        <span>Help</span>
-                    </a>
-                    <a href="#" class="menu-item" data-page="analytics" tabindex="0">
-                        <span class="menu-icon">${icons.barChart}</span>
-                        <span>Analytics</span>
-                    </a>
-                    <a href="#" class="menu-item" data-page="settings" tabindex="0">
-                        <span class="menu-icon">${icons.settings}</span>
-                        <span>Setting</span>
-                        <span style="display: inline-flex; align-items: center; margin-left: auto;">${icons.arrowDown}</span>
-                    </a>
-                    <a href="#" class="menu-item" data-page="logout" tabindex="0">
-                        <span class="menu-icon">${icons.logout}</span>
-                        <span>Logout</span>
-                    </a>
-                </nav>
-            </aside>
+            ${renderSidebar()}
             <main class="main-content">
                 <div class="page-header">
                     <h1 class="page-title">Dashboard</h1>
@@ -500,7 +438,8 @@ function renderDashboardPage() {
 }
 
 // Procurement & Inventory Page
-function renderProcurementPage(){
+function renderProcurementPage() {
+    // Data mirrored from RULES/ProcurementInventoryContent2.tsx
     const inventoryData = [
         { id: '1', name: 'Safety Helmets', category: 'PPE', quantity: 145, unit: 'pcs', minStock: 50, location: 'Warehouse A - Shelf 12', lastUpdated: '2025-10-12', status: 'In Stock' },
         { id: '2', name: 'Safety Goggles', category: 'PPE', quantity: 28, unit: 'pcs', minStock: 30, location: 'Warehouse A - Shelf 13', lastUpdated: '2025-10-11', status: 'Low Stock' },
@@ -524,6 +463,8 @@ function renderProcurementPage(){
         lowStock: inventoryData.filter(i => i.status === 'Low Stock').length,
         outOfStock: inventoryData.filter(i => i.status === 'Out of Stock').length
     };
+
+    // statusBadge helper moved to top-level for reuse in event handlers
 
     const renderInventoryRows = (rows) => rows.map(item => `
         <tr>
@@ -675,7 +616,8 @@ function renderProcurementPage(){
 }
 
 // User Profile Page
-function renderProfilePage(){
+function renderProfilePage() {
+    // Use persistent profileData aligned with RULES/UserProfileContent2.tsx
     const profile = profileData;
 
     return `
@@ -797,67 +739,7 @@ function renderSettingsPage() {
                     <a href="#" class="nav-link" data-nav="contact">Contact us</a>
                 </div>
             </nav>
-            <aside class="sidebar">
-                <div class="user-profile">
-                    <div class="user-avatar">JL</div>
-                    <div class="user-info">
-                        <div class="user-name">
-                            Junho Leon
-                            <span style="display: inline-flex; align-items: center;">${icons.arrowDown}</span>
-                        </div>
-                        <div class="user-email">jl.safety@gmail.com</div>
-                    </div>
-                </div>
-                <div class="sidebar-divider"></div>
-                <nav class="sidebar-menu">
-                    <a href="#" class="menu-item" data-page="dashboard">
-                        <span class="menu-icon">${icons.home}</span>
-                        <span>Home</span>
-                    </a>
-                    <a href="#" class="menu-item" data-page="profile">
-                        <span class="menu-icon">${icons.user}</span>
-                        <span>User Profile</span>
-                    </a>
-                    <a href="#" class="menu-item" data-page="procurement">
-                        <span class="menu-icon">${icons.file}</span>
-                        <span>Procurement and Inventory</span>
-                        <span class="menu-badge">99+</span>
-                    </a>
-                    <a href="#" class="menu-item" data-page="site">
-                        <span class="menu-icon">${icons.mapPin}</span>
-                        <span>Site Management</span>
-                    </a>
-                    <a href="#" class="menu-item" data-page="workforce">
-                        <span class="menu-icon">${icons.users}</span>
-                        <span>Workforce Management</span>
-                    </a>
-                    <a href="#" class="menu-item" data-page="budget">
-                        <span class="menu-icon">${icons.wallet}</span>
-                        <span>Budget and Cost Control</span>
-                    </a>
-                    <a href="#" class="menu-item" data-page="documents">
-                        <span class="menu-icon">${icons.folder}</span>
-                        <span>Document Management</span>
-                    </a>
-                    <a href="#" class="menu-item" data-page="help">
-                        <span class="menu-icon">${icons.help}</span>
-                        <span>Help</span>
-                    </a>
-                    <a href="#" class="menu-item" data-page="analytics">
-                        <span class="menu-icon">${icons.barChart}</span>
-                        <span>Analytics</span>
-                    </a>
-                    <a href="#" class="menu-item active" data-page="settings">
-                        <span class="menu-icon">${icons.settings}</span>
-                        <span>Setting</span>
-                        <span style="display: inline-flex; align-items: center; margin-left: -5px;">${icons.arrowDown}</span>
-                    </a>
-                    <a href="#" class="menu-item" data-page="logout">
-                        <span class="menu-icon">${icons.logout}</span>
-                        <span>Logout</span>
-                    </a>
-                </nav>
-            </aside>
+            ${renderSidebar()}
             <main class="main-content">
                 <div class="page-header">
                     <h1 class="page-title">Settings</h1>
@@ -1261,6 +1143,7 @@ function attachProcurementHandlers() {
 
 function attachDashboardHandlers() {
     const menuItems = document.querySelectorAll('.menu-item');
+    const supportedPages = new Set(['dashboard','procurement','profile','settings']);
 
     menuItems.forEach(item => {
         item.addEventListener('click', (e) => {
@@ -1272,7 +1155,10 @@ function attachDashboardHandlers() {
                 saveAuthState();
                 currentPage = 'login';
             } else {
-                currentPage = page;
+                activeSidebarPage = page;
+                if (supportedPages.has(page)) {
+                    currentPage = page;
+                }
             }
 
             render();
@@ -1284,24 +1170,27 @@ function attachSettingsHandlers() {
     const themeToggle = document.getElementById('themeToggle');
     const themePreviews = document.querySelectorAll('.theme-preview-card[data-theme]');
     const menuItems = document.querySelectorAll('.menu-item[data-page]');
+    const supportedPages = new Set(['dashboard','procurement','profile','settings']);
+    const appearanceText = document.querySelector('.appearance-text');
     
     if (themeToggle) {
         // Set initial state
         themeToggle.checked = theme === 'dark';
+        if (appearanceText) {
+            appearanceText.textContent = theme === 'dark' ? 'Dark theme is enabled' : 'Light theme is enabled';
+        }
         
         themeToggle.addEventListener('change', (e) => {
             theme = e.target.checked ? 'dark' : 'light';
             document.body.className = theme;
             document.body.classList.remove('dark', 'light');
             document.body.classList.add(theme);
-            // Swap theme-specific images (logo/title) when toggled
-            document.querySelectorAll('[data-dark-src][data-light-src]').forEach(img => {
-                const darkSrc = img.getAttribute('data-dark-src');
-                const lightSrc = img.getAttribute('data-light-src');
-                img.setAttribute('src', theme === 'light' ? lightSrc : darkSrc);
-            });
+            // Do not change logo/title images on theme toggle
             saveThemeState();
             updateThemePreviews();
+            if (appearanceText) {
+                appearanceText.textContent = theme === 'dark' ? 'Dark theme is enabled' : 'Light theme is enabled';
+            }
         });
     }
     
@@ -1314,12 +1203,10 @@ function attachSettingsHandlers() {
             if (themeToggle) {
                 themeToggle.checked = theme === 'dark';
             }
-            // Swap theme-specific images (logo/title) when card is clicked
-            document.querySelectorAll('[data-dark-src][data-light-src]').forEach(img => {
-                const darkSrc = img.getAttribute('data-dark-src');
-                const lightSrc = img.getAttribute('data-light-src');
-                img.setAttribute('src', theme === 'light' ? lightSrc : darkSrc);
-            });
+            if (appearanceText) {
+                appearanceText.textContent = theme === 'dark' ? 'Dark theme is enabled' : 'Light theme is enabled';
+            }
+            // Do not change logo/title images when preview card is clicked
             saveThemeState();
             updateThemePreviews();
         });
@@ -1333,10 +1220,11 @@ function attachSettingsHandlers() {
                 isAuthenticated = false;
                 saveAuthState();
                 currentPage = 'login';
-            } else if (page === 'dashboard') {
-                currentPage = 'dashboard';
             } else {
-                currentPage = 'dashboard';
+                activeSidebarPage = page;
+                if (supportedPages.has(page)) {
+                    currentPage = page;
+                }
             }
             render();
         });
@@ -1372,12 +1260,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.className = '';
         document.body.classList.add('dark');
     }
-    // Ensure theme-specific images are correct on initial load
-    document.querySelectorAll('[data-dark-src][data-light-src]').forEach(img => {
-        const darkSrc = img.getAttribute('data-dark-src');
-        const lightSrc = img.getAttribute('data-light-src');
-        img.setAttribute('src', theme === 'light' ? lightSrc : darkSrc);
-    });
+    // Keep original logo/title images regardless of theme on initial load
     
     render();
 });
