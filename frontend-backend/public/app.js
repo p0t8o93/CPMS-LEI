@@ -549,6 +549,129 @@ function renderProcurementPage(){
             <td>${statusBadge(order.status)}</td>
         </tr>
     `).join('');
+
+    return `
+        <div class="dashboard-container">
+            <nav class="top-nav">
+                <div class="nav-logo">
+                    <img src="LOGO2.png" alt="LinkENERGIÉ Logo" class="nav-logo-image" data-dark-src="LOGO3A.png" data-light-src="LOGO3A.png" />
+                    <img src="SYSTEM NAME below the logo.png" alt="LinkENERGIÉ" class="nav-name-image" data-dark-src="subtitle2.png" data-light-src="subtitle2.png" />
+                </div>
+                <div class="nav-links">
+                    <a href="#" class="nav-link active" data-nav="dashboard" tabindex="0">Dashboard</a>
+                    <a href="#" class="nav-link" data-nav="projects" tabindex="0">Our projects</a>
+                    <a href="#" class="nav-link" data-nav="contact" tabindex="0">Contact us</a>
+                </div>
+            </nav>
+            ${renderSidebar()}
+            <main class="main-content">
+                <div class="page-header">
+                    <h1 class="page-title">Procurement and Inventory</h1>
+                    <p class="page-subtitle">Manage inventory stock and purchase orders</p>
+                    <div class="page-actions">
+                        <button class="btn btn-secondary"><span class="icon">⬇</span>Export</button>
+                        <button id="addNewBtn" class="btn btn-accent">+ Add New</button>
+                    </div>
+                </div>
+
+                <div class="tabs">
+                    <div class="tabs-list">
+                        <button class="tab-trigger active" data-tab="inventory"><span class="menu-icon">${icons.package}</span><span>Inventory & Stock</span></button>
+                        <button class="tab-trigger" data-tab="orders"><span class="menu-icon">${icons.shoppingCart}</span><span>Orders</span></button>
+                    </div>
+                    <div class="tab-content active" data-content="inventory">
+                        <div class="stats-row">
+                            <div class="stat-box"><div class="stat-label">Total Items</div><div class="stat-value">${totals.totalItems}</div></div>
+                            <div class="stat-box"><div class="stat-label">In Stock</div><div class="stat-value">${totals.inStock}</div></div>
+                            <div class="stat-box"><div class="stat-label">Low Stock</div><div class="stat-value">${totals.lowStock}</div></div>
+                            <div class="stat-box"><div class="stat-label">Out of Stock</div><div class="stat-value">${totals.outOfStock}</div></div>
+                        </div>
+                        <div class="table-tools">
+                            <div class="input-wrapper">
+                                <span class="input-icon">${icons.search}</span>
+                                <input id="inventorySearch" class="form-input" placeholder="Search by name, category, or location..." />
+                            </div>
+                            <button class="btn btn-secondary"><span class="icon">${icons.filter}</span>Filters</button>
+                        </div>
+                        <div class="table-wrap">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Item Name</th>
+                                        <th>Category</th>
+                                        <th>Quantity</th>
+                                        <th>Min Stock</th>
+                                        <th>Location</th>
+                                        <th>Last Updated</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="inventoryBody">
+                                    ${renderInventoryRows(inventoryData)}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="tab-content" data-content="orders">
+                        <div class="stats-row">
+                            <div class="stat-box"><div class="stat-label">Total Orders</div><div class="stat-value">${ordersData.length}</div></div>
+                            <div class="stat-box"><div class="stat-label">Pending</div><div class="stat-value">${ordersData.filter(o=>o.status==='Pending').length}</div></div>
+                            <div class="stat-box"><div class="stat-label">In Transit</div><div class="stat-value">${ordersData.filter(o=>o.status==='In Transit').length}</div></div>
+                            <div class="stat-box"><div class="stat-label">Delivered</div><div class="stat-value">${ordersData.filter(o=>o.status==='Delivered').length}</div></div>
+                            <div class="stat-box"><div class="stat-label">Total Value</div><div class="stat-value">$17,710</div></div>
+                        </div>
+                        <div class="table-tools">
+                            <div class="input-wrapper">
+                                <span class="input-icon">${icons.search}</span>
+                                <input id="ordersSearch" class="form-input" placeholder="Search by order number, supplier, or items..." />
+                            </div>
+                            <button class="btn btn-secondary"><span class="icon">${icons.filter}</span>Filters</button>
+                        </div>
+                        <div class="table-wrap">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Order Number</th>
+                                        <th>Supplier</th>
+                                        <th>Items</th>
+                                        <th>Quantity</th>
+                                        <th>Total Cost</th>
+                                        <th>Order Date</th>
+                                        <th>Expected Delivery</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="ordersBody">
+                                    ${renderOrderRows(ordersData)}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <!-- Add Item Wizard Modal -->
+                <div id="addWizardModal" class="modal-overlay" aria-hidden="true">
+                    <div class="modal">
+                        <div class="modal-header">
+                            <h3 id="wizardTitle">Add New</h3>
+                            <button id="wizardClose" class="btn btn-icon" aria-label="Close">✕</button>
+                        </div>
+                        <div id="wizardStep" class="modal-body">
+                            <!-- Step content injected dynamically -->
+                        </div>
+                        <div class="modal-footer">
+                            <div class="wizard-progress"><span id="wizardProgress">Step 1</span></div>
+                            <div class="wizard-actions">
+                                <button id="wizardBack" class="btn btn-secondary">Back</button>
+                                <button id="wizardNext" class="btn btn-primary">Next</button>
+                                <button id="wizardSubmit" class="btn btn-accent" style="display:none">Add Row</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    `;
 }
 
 // Settings Page
