@@ -898,6 +898,14 @@ function render() {
             app.innerHTML = renderDashboardPage();
             attachDashboardHandlers();
             break;
+        case 'procurement':
+            app.innerHTML = renderProcurementPage();
+            attachProcurementHandlers();
+            break;
+        case 'profile':
+            app.innerHTML = renderProfilePage();
+            attachDashboardHandlers();
+            break;
         case 'settings':
             app.innerHTML = renderSettingsPage();
             attachSettingsHandlers();
